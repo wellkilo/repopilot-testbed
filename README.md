@@ -1,6 +1,6 @@
 # RepoPilot Testbed
 
-This repository is the deterministic demo target for [RepoPilot](https://github.com/wellkilo/RepoPilot).
+This repository is the deterministic demo target for the RepoPilot Agent Infra project.
 
 It intentionally contains a small but production-realistic bug in evaluation normalization. The repository is designed for an auditable maintenance exercise:
 
