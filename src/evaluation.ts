@@ -10,7 +10,7 @@ export interface NormalizedEvaluation {
 
 export function normalizeEvaluation(result: EvaluationResult): NormalizedEvaluation {
   return {
-    score: result.score || 1,
+    score: result.score ?? 1,
     reason: result.reason.trim()
   };
 }
