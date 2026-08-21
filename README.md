@@ -2,7 +2,7 @@
 
 This repository is the deterministic demo target for the RepoPilot Agent Infra project.
 
-It intentionally contains a small but production-realistic bug in evaluation normalization. The repository is designed for an auditable maintenance exercise:
+It contains production-realistic defects that can be reproduced without external services. The repository is designed for an auditable maintenance exercise:
 
 1. A GitHub Issue describes the observed behavior.
 2. CI supplies a deterministic failing regression test.
@@ -17,4 +17,11 @@ npm run typecheck
 npm test
 ```
 
-The initial `main` branch is intentionally red. Do not fix the defect directly on `main`; the repair should arrive through a RepoPilot pull request.
+## Demo scenarios
+
+- `main`: zero-score normalization regression tracked by Issue #1.
+- `repopilot/demo-webhook-replay-baseline`: concurrent retries of the same GitHub
+  Issue delivery create and dispatch more than one maintenance task.
+
+Demo baselines are intentionally red. Do not fix a defect directly on its
+baseline branch; the repair should arrive through a RepoPilot pull request.
