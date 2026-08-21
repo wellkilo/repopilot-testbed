@@ -25,3 +25,7 @@ npm test
 
 Demo baselines are intentionally red. Do not fix a defect directly on its
 baseline branch; the repair should arrive through a RepoPilot pull request.
+
+The webhook replay repair must make task creation and dispatch one idempotent
+operation. Concurrent retries with the same delivery ID share one in-flight
+creation, while different delivery IDs remain independent.
