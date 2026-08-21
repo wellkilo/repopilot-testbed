@@ -40,4 +40,33 @@ describe("IssueWebhookProcessor", () => {
     expect(store.size()).toBe(1);
     expect(dispatchTask).toHaveBeenCalledOnce();
   });
+
+  it("returns the existing task for a sequential retry", async () => {
+    const dispatchTask = vi.fn(async () => undefined);
+    const store = new DeliveryTaskStore();
+    const processor = new IssueWebhookProcessor(store, dispatchTask);
+
+    const first = await processor.process(delivery);
+    const retry = await processor.process(delivery);
+
+    expect(retry).toEqual({ task: first.task, newlyCreated: false });
+    expect(dispatchTask).toHaveBeenCalledOnce();
+  });
+
+  it("processes different delivery IDs independently", async () => {
+    const dispatchTask = vi.fn(async () => undefined);
+    const store = new DeliveryTaskStore();
+    const processor = new IssueWebhookProcessor(store, dispatchTask);
+
+    const [first, second] = await Promise.all([
+      processor.process(delivery),
+      processor.process({ ...delivery, deliveryId: "delivery-issue-43", issueNumber: 43 })
+    ]);
+
+    expect(first.task.taskId).not.toBe(second.task.taskId);
+    expect(first.newlyCreated).toBe(true);
+    expect(second.newlyCreated).toBe(true);
+    expect(store.size()).toBe(2);
+    expect(dispatchTask).toHaveBeenCalledTimes(2);
+  });
 });

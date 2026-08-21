@@ -17,4 +17,9 @@ export interface ProcessIssueResult {
   newlyCreated: boolean;
 }
 
+export interface StoredTaskResult {
+  task: MaintenanceTask;
+  newlyCreated: boolean;
+}
+
 export type DispatchTask = (task: MaintenanceTask) => Promise<void>;

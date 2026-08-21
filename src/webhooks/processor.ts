@@ -15,21 +15,16 @@ export class IssueWebhookProcessor {
   ) {}
 
   async process(delivery: IssueOpenedDelivery): Promise<ProcessIssueResult> {
-    const existing = await this.store.find(delivery.deliveryId);
-    if (existing) {
-      return { task: existing, newlyCreated: false };
-    }
-
-    await Promise.resolve();
-
-    const task: MaintenanceTask = {
-      taskId: randomUUID(),
-      deliveryId: delivery.deliveryId,
-      repository: delivery.repository,
-      issueNumber: delivery.issueNumber
-    };
-    await this.store.save(task);
-    await this.dispatchTask(task);
-    return { task, newlyCreated: true };
+    return this.store.getOrCreate(delivery.deliveryId, async () => {
+      await Promise.resolve();
+      const task: MaintenanceTask = {
+        taskId: randomUUID(),
+        deliveryId: delivery.deliveryId,
+        repository: delivery.repository,
+        issueNumber: delivery.issueNumber
+      };
+      await this.dispatchTask(task);
+      return task;
+    });
   }
 }
